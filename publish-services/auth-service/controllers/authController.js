@@ -5,7 +5,6 @@ exports.login = async (req, res) => {
   const { username, password } = req.query;
   await publishToQueue('auth_queue', JSON.stringify({ username }));
   res.status(200).json({ message: 'Login successful' });
-
 };
 
 async function publishToQueue(queue, data) {
