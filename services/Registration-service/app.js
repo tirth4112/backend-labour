@@ -2,6 +2,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const amqp = require('amqplib');
+// const consumeQueueAndPostToDatabase = require('./consumers/loginqueue');
 
 const app = express();
 const port = 3002;
@@ -10,6 +11,7 @@ app.use(bodyParser.json());
 
 const rabbitMQServer = 'amqp://localhost';
 const registerQueue = 'register_queue';
+// consumeQueueAndPostToDatabase();
 
 app.post('/register', async (req, res) => {
   // Registration logic here

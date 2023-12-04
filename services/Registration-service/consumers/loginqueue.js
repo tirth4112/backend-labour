@@ -52,6 +52,7 @@ async function addUserToMongoDB(username) {
   
       // Insert the user data into MongoDB
       await collection.insertOne({ username });
+  
       console.log(`User added to MongoDB: ${username}`);
     } catch (error) {
       console.error('Error adding user to MongoDB:', error.message);
