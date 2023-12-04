@@ -1,24 +1,3 @@
-// auth-service/app.js
-// const express = require('express');
-// const bodyParser = require('body-parser');
-// const authController = require('./controllers/authController');
-
-// const app = express();
-// const port = 3002;
-
-// app.use(bodyParser.json());
-
-// app.post('/Register', authController.login);
-
-// app.listen(port, () => {
-//   console.log(`Auth service is running on port ${port}`);
-// });
-
-
-
-
-
-
 // registration-service/app.js
 const express = require('express');
 const bodyParser = require('body-parser');

@@ -8,8 +8,6 @@ exports.login = async (req, res) => {
 
 };
 
-
-
 async function publishToQueue(queue, data) {
   const connection = await amqp.connect('amqp://localhost');
   const channel = await connection.createChannel();
