@@ -5,7 +5,7 @@ const amqp = require('amqplib');
 // const consumeQueueAndPostToDatabase = require('./consumers/loginqueue');
 
 const app = express();
-const port = 3002;
+const port = 3003;
 
 app.use(bodyParser.json());
 

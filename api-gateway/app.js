@@ -1,9 +1,9 @@
 // main.js
 import express from 'express';
 import bodyParser from 'body-parser';
-import axios from 'axios';
+// import axios from 'axios';
 import { createProxyMiddleware } from 'http-proxy-middleware';
-import amqp from 'amqplib';
+// import amqp from 'amqplib';
 
 const app = express();
 const port = 3000;
