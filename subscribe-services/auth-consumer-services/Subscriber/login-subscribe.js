@@ -1,3 +1,5 @@
+//login-subscriber
+
 const amqp = require('amqplib');
 const addUserToMongoDB = require('../controller/login-subscribe');
 
@@ -40,3 +42,54 @@ async function consumeQueueAndPostToDatabase() {
 }
 
 module.exports = consumeQueueAndPostToDatabase;
+
+
+
+
+
+
+
+
+
+
+
+
+
+// // auth-service/Subscriber/login-subscribe.js
+
+// const amqp = require('amqplib');
+// const { consumeQueueAndPostToDatabase } = require('../controller/login-subscribe');
+
+// async function startSubscriber() {
+//   try {
+//     const connection = await amqp.connect('amqp://localhost');
+//     const channel = await connection.createChannel();
+
+//     await channel.assertQueue('auth_queue', { durable: false });
+
+//     channel.consume('auth_queue', async (message) => {
+//       await consumeQueueAndPostToDatabase(channel, message);
+//     });
+//   } catch (error) {
+//     console.error('Error consuming queue and posting to database:', error.message);
+//     throw error;
+//   }
+// }
+
+// module.exports = { startSubscriber };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

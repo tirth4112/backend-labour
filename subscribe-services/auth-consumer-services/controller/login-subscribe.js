@@ -1,3 +1,5 @@
+//controller login-subscribe
+
 const { MongoClient } = require('mongodb'); // Import the MongoClient from MongoDB
 const config = require('../config/config');
 
@@ -26,3 +28,18 @@ async function addUserToMongoDB(username) {
 
 
   module.exports = addUserToMongoDB;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
