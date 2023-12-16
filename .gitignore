@@ -1,0 +1,14 @@
+# Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# API Gateway
+/api-gateway/node_modules/
+
+# Publish Services
+/publish-services/auth-service/node_modules/
+/publish-services/Registration-service/node_modules/
+
+# Subscribe Services
+/subscribe-services/auth-consumer-services/node_modules/
