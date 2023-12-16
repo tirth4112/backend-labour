@@ -1,0 +1,26 @@
+const mongoose = require('mongoose');
+
+const falseLoginLogSchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true
+  },
+  username: {
+    type: String,
+    required: true
+  },
+  timestamp: {
+    type: Date,
+    default: Date.now,
+    required: true
+  },
+  failedAttempts: {
+    type: Number,
+    default: 1,
+    required: true
+  }
+});
+
+const FalseLoginLog = mongoose.model('False_Request_Client', falseLoginLogSchema);
+
+module.exports = FalseLoginLog;

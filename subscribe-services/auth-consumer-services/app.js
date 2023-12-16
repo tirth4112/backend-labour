@@ -1,9 +1,8 @@
 // cd backend-labour/subscribe-services/auth-consumer-services 
 
-//auth-service/app.js
-const express = require('express');
-const bodyParser = require('body-parser');
-const consumeQueueAndPostToDatabase=require('./Subscriber/login-subscribe')
+import express from 'express';
+import bodyParser from 'body-parser';
+import consumeQueueAndPostToDatabase from './Subscriber/login-subscribe.js'
 const app = express();
 const port = 3002;
 app.use(bodyParser.json());
