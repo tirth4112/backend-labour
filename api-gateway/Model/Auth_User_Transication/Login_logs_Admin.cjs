@@ -6,7 +6,8 @@ const loginLogSchema = new mongoose.Schema({
     required: true,
   },
   username: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Userdetail_Admin', // Assuming you have a User model to reference
     required: true
   },
   timestamp: {

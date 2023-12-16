@@ -6,8 +6,10 @@ const falseLoginLogSchema = new mongoose.Schema({
     required: true
   },
   username: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Userdetail_CLient', // Assuming you have a User model to reference
     required: true
+    
   },
   timestamp: {
     type: Date,

@@ -27,6 +27,10 @@ const userDetailSchema = new mongoose.Schema({
     address: {
         type: String,
         required: true
+    }, 
+    Secret_Question: {
+        type: String,
+        required: true
     },
     pincode: {
         type: String,
