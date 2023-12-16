@@ -1,5 +1,5 @@
 const { MongoClient } = require('mongodb'); // Import the MongoClient from MongoDB
-const config = require('../config/config');
+const config = require('../../../center-store/config/Auth_User');
 
 async function addUserToMongoDB(username) {
     const { url, databaseName } = config.mongodb;
@@ -11,7 +11,7 @@ async function addUserToMongoDB(username) {
     try {
       await client.connect();
       const database = client.db(databaseName);
-      const collection = database.collection('login');
+      const collection = database.collection('USerdetail');
   
       // Insert the user data into MongoDB
       await collection.insertOne({ username });

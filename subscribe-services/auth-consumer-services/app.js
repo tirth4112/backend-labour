@@ -1,4 +1,6 @@
-// auth-service/app.js
+// cd backend-labour/subscribe-services/auth-consumer-services 
+
+//auth-service/app.js
 const express = require('express');
 const bodyParser = require('body-parser');
 const consumeQueueAndPostToDatabase=require('./Subscriber/login-subscribe')

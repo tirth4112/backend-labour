@@ -1,4 +1,4 @@
-// auth-service/app.js
+// cd backend-labour/publish-services/auth-service 
 const express = require('express');
 const bodyParser = require('body-parser');
 const authController = require('./controllers/authController');
