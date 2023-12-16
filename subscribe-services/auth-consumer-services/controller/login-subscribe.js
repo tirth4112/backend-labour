@@ -1,5 +1,5 @@
 import { MongoClient } from 'mongodb';
-import Auth_User from '../../../api-gateway/config/Auth_User.cjs';
+import Auth_User from '../../../api-gateway/config/Auth_User_Master.cjs';
 import Userdetail from '../../../api-gateway/Model/Auth_User/Userdetail-Admin.cjs';
 import mongoose from 'mongoose';
 
