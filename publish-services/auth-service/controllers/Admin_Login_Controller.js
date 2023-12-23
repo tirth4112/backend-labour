@@ -1,5 +1,6 @@
 const amqp = require('amqplib');
 const queueNames=require('../../../api-gateway/Rabbitmq/Queue.json')
+const publishToQueue =require('../../../api-gateway/SendingToQueue/publishToQueue.cjs').default;
 exports.Admin_Login_Controller = async (req, res) => {
 try
 {  const queues = queueNames.Auth_user;
@@ -11,7 +12,7 @@ console.log(data.username);
     res.status(500).json({ message: 'Empty Field' });
 
   }
-  await publishToQueue(queues, JSON.stringify({ username }));
+  await publishToQueue(queues.Admin_Login, JSON.stringify(data));
   res.status(200).json({ message: 'Login successful' });
 }
 catch(c)
@@ -20,10 +21,3 @@ catch(c)
  
 }
 };
-
-async function publishToQueue(queue, data) {
-  const connection = await amqp.connect('amqp://localhost');
-  const channel = await connection.createChannel();
-  await channel.assertQueue(queue.Admin_Reg, { durable: false });
-  channel.sendToQueue(queue.Admin_Reg, Buffer.from(data));
-}
