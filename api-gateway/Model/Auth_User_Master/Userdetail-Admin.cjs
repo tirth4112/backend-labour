@@ -24,6 +24,7 @@ const userDetailSchema = new mongoose.Schema({
         required: true,
         match: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
     },
+
     address: {
         type: String,
         required: true
@@ -41,6 +42,24 @@ const userDetailSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         required: true
     },
+
+
+    password: {
+        type: String,
+        required: true,
+        // You can add additional password validation rules here
+    },
+    confirmPassword: {
+        type: String,
+        required: true,
+        validate: {
+            validator: function (value) {
+                return value === this.password;
+            },
+            message: 'Password confirmation does not match the password.',
+        },
+    },
+    
     createdby: {
         type: mongoose.Schema.Types.ObjectId,
         required: true

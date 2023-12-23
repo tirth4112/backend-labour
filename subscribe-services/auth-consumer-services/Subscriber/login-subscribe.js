@@ -1,14 +1,17 @@
-
-import amqp from 'amqplib'
+import amqp from 'amqplib';
 import addUserToMongoDB from '../controller/login-subscribe.js';
+import queueNames from '../../../api-gateway/Rabbitmq/Queue.json' assert { type: "json" };
+
 async function consumeQueueAndPostToDatabase() {
   try {
+    const queues = queueNames.Auth_user;
+
     const connection = await amqp.connect('amqp://localhost');
     const channel = await connection.createChannel();
 
-    await channel.assertQueue('auth_queue', { durable: false });
+    await channel.assertQueue(queues.Admin_Reg, { durable: false });
 
-    channel.consume('auth_queue', async (message) => {
+    channel.consume(queues.Admin_Reg, async (message) => {
       if (message !== null) {
         const data = message.content.toString();
         console.log('Received message from queue:', data);
@@ -29,8 +32,5 @@ async function consumeQueueAndPostToDatabase() {
     throw error;
   }
 }
-
-
-
 
 export default consumeQueueAndPostToDatabase;

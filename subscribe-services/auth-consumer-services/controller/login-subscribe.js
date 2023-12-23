@@ -1,6 +1,7 @@
 import { MongoClient } from 'mongodb';
 import Auth_User from '../../../api-gateway/config/Auth_User_Master.cjs';
-import Userdetail from '../../../api-gateway/Model/Auth_User/Userdetail-Admin.cjs';
+import Userdetail from '../../../api-gateway/Model/Auth_User_Master/Userdetail-Admin.cjs';
+// import user from '../../../api-gateway/Model/'
 import mongoose from 'mongoose';
 
 async function addUserToMongoDB(username) {
