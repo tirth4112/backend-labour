@@ -28,6 +28,7 @@ async function Admin_Registration_Controller(data) {
             pincode: '123456',
             password: hashedConfirmPassword,
             confirmPassword: hashedConfirmPassword,
+            Secret_Question:data.Secret_Question,
             Contact: data.Contact,
             profileimage: new mongoose.Types.ObjectId(),
             createdby: new mongoose.Types.ObjectId(),
