@@ -1,17 +1,15 @@
-// cd backend-labour/api-gateway
-// main.js
+
 import express from 'express';
 import bodyParser from 'body-parser';
-// import axios from 'axios';
 import { createProxyMiddleware } from 'http-proxy-middleware';
-// import amqp from 'amqplib';
+
 
 const app = express();
 const port = 3000;
 
 app.use(bodyParser.json());
 
-const authProxy = createProxyMiddleware('/', {
+const authProxy = createProxyMiddleware('', {
   target: 'http://localhost:3001',
   changeOrigin: true,
   onError: (err, req, res) => {

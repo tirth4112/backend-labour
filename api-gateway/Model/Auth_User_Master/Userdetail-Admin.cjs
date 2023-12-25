@@ -42,7 +42,11 @@ const userDetailSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         required: true
     },
-
+    Contact: {
+        type: String,
+        required: true,
+        // You can add additional password validation rules here
+    },
 
     password: {
         type: String,
