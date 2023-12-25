@@ -2,7 +2,11 @@
     "Auth_user":{
         "Admin_Reg":"auth_admin_reg",
         "Client_Reg":"auth_client_reg",
-        "Admin_Login":"admin_login",
+        "Admin_Login":{
+            "Admin_Successful_Log":"Admin_Successful_Log",
+            "Admin_False_Log":"Admin_False_Log"
+
+        },
         "Client_Login":"client_login"
 
     }

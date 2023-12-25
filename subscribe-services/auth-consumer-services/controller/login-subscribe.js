@@ -16,7 +16,7 @@ async function addUserToMongoDB(username) {
         
         const database = client.db(databaseName);
         const collection = database.collection('login');
-        const collection2 = database.collection('Userdetail');
+        // const collection2 = database.collection('Userdetail');
     
         await collection.insertOne({ username });
         const newUser = new Userdetail({
@@ -33,7 +33,7 @@ async function addUserToMongoDB(username) {
               deletedby: null,
               active: true
           });
-        await collection2.insertOne(newUser);
+        // await collection2.insertOne(newUser);
 
       
     } catch (error) {
