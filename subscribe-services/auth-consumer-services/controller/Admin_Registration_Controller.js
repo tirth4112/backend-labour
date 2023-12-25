@@ -4,36 +4,36 @@ import Userdetail from '../../../api-gateway/Model/Auth_User_Master/Userdetail-A
 // import user from '../../../api-gateway/Model/'
 import mongoose from 'mongoose';
 
-async function addUserToMongoDB(username) {
+async function Admin_Registration_Controller(data) {
     const { url, databaseName } = Auth_User;
 
-    console.log(`Adding user to MongoDB: ${username}`);
+    // console.log(`Adding user to MongoDB: ${data}`);
 
     const client = new MongoClient(url);
 
     try {
         await client.connect();
-        
+        console.log(data.fname)
         const database = client.db(databaseName);
-        const collection = database.collection('login');
-        // const collection2 = database.collection('Userdetail');
-    
-        await collection.insertOne({ username });
-        const newUser = new Userdetail({
-              fname: 'John',
-              lname: 'Doe',
+        const collection = database.collection('UserDetail-Admin');
+            const newUser = new Userdetail({
+              fname:data.fname,
+              lname: data.lname,
               age: 25,
               gender: 'male',
               emailid: 'john.doe@example.com',
               address: '123 Main St',
               pincode: '123456',
+              password:data.password,
+              confirmPassword:data.confirmPassword,
+              Contact:data.Contact,
               profileimage: new mongoose.Types.ObjectId(),
               createdby: new mongoose.Types.ObjectId(),
               updatedby: new mongoose.Types.ObjectId(),
               deletedby: null,
               active: true
           });
-        // await collection2.insertOne(newUser);
+        await collection.insertOne(newUser);
 
       
     } catch (error) {
@@ -44,4 +44,4 @@ async function addUserToMongoDB(username) {
     }
 }
 
-export default addUserToMongoDB;
+export default Admin_Registration_Controller;

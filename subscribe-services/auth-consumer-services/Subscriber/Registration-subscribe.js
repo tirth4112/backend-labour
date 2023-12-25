@@ -1,5 +1,5 @@
 import amqp from 'amqplib';
-import addUserToMongoDB from '../controller/login-subscribe.js';
+import Admin_Registration_Controller from '../controller/Admin_Registration_Controller.js';
 import queueNames from '../../../api-gateway/Rabbitmq/Queue.json' assert { type: "json" };
 
 async function consumeQueueAndPostToDatabase() {
@@ -17,9 +17,9 @@ async function consumeQueueAndPostToDatabase() {
         console.log('Received message from queue:', data);
 
         try {
-          const { username } = JSON.parse(data);
+          const da= JSON.parse(data);
 
-          await addUserToMongoDB(username);
+          await Admin_Registration_Controller(da);
 
           channel.ack(message);
         } catch (parseError) {

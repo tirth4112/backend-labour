@@ -92,6 +92,6 @@ const userDetailSchema = new mongoose.Schema({
     }
 });
 
-const UserDetail = mongoose.model('UserDetail', userDetailSchema);
+const UserDetail = mongoose.model('UserDetail-Admin', userDetailSchema);
 
 module.exports = UserDetail;

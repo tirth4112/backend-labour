@@ -9,15 +9,14 @@ const port = 3000;
 
 app.use(bodyParser.json());
 
-const authProxy = createProxyMiddleware('', {
+const authProxy = createProxyMiddleware('/',{
   target: 'http://localhost:3001',
   changeOrigin: true,
   onError: (err, req, res) => {
-    // console.error('Auth Proxy Error:');
-    res.status(500).send('Auth Proxy Error');
+    console.error('Auth Proxy Error:', err);
+    res.status(500).send('Auth Connection Error');
   },
 });
-
 const registrationProxy = createProxyMiddleware('/register', {
   target: 'http://localhost:3002',
   changeOrigin: true,

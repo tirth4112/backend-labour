@@ -1,4 +1,4 @@
-import consumeQueueAndPostToDatabase from './Subscriber/login-subscribe.js'
+import consumeQueueAndPostToDatabase from './Subscriber/Registration-subscribe.js'
 import Admin_Login_Successful_subscribe from './Subscriber/Admin_Login_Successful_subscribe.js'
 import Admin_Login_unSuccessful_subscribe from './Subscriber/Admin_Login_unSuccessful_subscribe.js'
 

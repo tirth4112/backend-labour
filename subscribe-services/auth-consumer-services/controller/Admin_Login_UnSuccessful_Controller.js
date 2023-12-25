@@ -3,24 +3,18 @@ import Auth_User from '../../../api-gateway/config/Auth_User_Transication.cjs';
 import False_Request_Admin from '../../../api-gateway/Model/Auth_User_Transication/False_Request_Admin.cjs'
 // import user from '../../../api-gateway/Model/'
 import mongoose from 'mongoose';
+import ConnectionStart from '../../../api-gateway/ConnectionStart.cjs';
 
-async function Admin_Login_unSuccessful_Controller(username) {
-    const { url, databaseName } = Auth_User;
+async function Admin_Login_unSuccessful_Controller(userId) {
+      try {  
+        const collection = await ConnectionStart(Auth_User, 'False_Request_Admin');
 
-    console.log(`Adding user to MongoDB: ${username}`);
-
-    const client = new MongoClient(url);
-
-    try {
-        await client.connect();
-        
-        const database = client.db(databaseName);
-        const collection = database.collection('False_Request_Admin');
+        // const collection = database.collection('False_Request_Admin');
    
  
         const newData = new False_Request_Admin(
             {
-                  userId,
+                UserId:   userId,
                   timestamp: new Date(),
                 }
           );
@@ -30,8 +24,6 @@ async function Admin_Login_unSuccessful_Controller(username) {
     }catch (error) {
         console.error('Error adding user to MongoDB:', error.message);
         throw error; // Rethrow the error to handle it elsewhere if needed
-    } finally {
-        await client.close();
     }
 }
 

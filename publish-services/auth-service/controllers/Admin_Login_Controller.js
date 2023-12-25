@@ -1,45 +1,59 @@
-const express = require('express');
+const ConnectionStart = require('../../../api-gateway/ConnectionStart.cjs');
+const Auth_User = require('../../../api-gateway/config/Auth_User_Master.cjs');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const UserDetail = require('../../../api-gateway/Model/Auth_User_Master/Userdetail-Admin.cjs');
-const LoginLog = require('../../../api-gateway/Model/Auth_User_Transication/Login_logs_Admin.cjs');
-const FalseLoginLog = require('../../../api-gateway/Model/Auth_User_Transication/False_Request_Admin.cjs');
 const queueNames = require('../../../api-gateway/Rabbitmq/Queue.json');
-const  publishToQueue =  require('../../../api-gateway/SendingToQueue/publishToQueue.cjs');
+const publishToQueue = require('../../../api-gateway/SendingToQueue/publishToQueue.cjs');
+const Auth_User_Transication = require('../../../api-gateway/config/Auth_User_Transication.cjs');
+const crypto = require('crypto');
+
 
 exports.Admin_Login_Controller = async (req, res) => {
   try {
-    const { Contact, password } = req.body;
-
+    const { Contact, password } = req.query;
+console.log(Contact)
     // Check if Contact or password is undefined
-    if (Contact === undefined || password === undefined) {
-      res.status(400).json({ message: 'Empty Field' });
-      return;
+    if (Contact === '' || password === '') {
+      
+      return res.status(400).json({ message: 'Empty Field' });;
     }
 
-    // Find user by Contact
-    const user = await UserDetail.findOne({ Contact });
+    // Creating initial connection 
+    const collection = await ConnectionStart(Auth_User, 'UserDetail-Admin');
+
+    const user = await collection.findOne({ Contact });
 
     if (!user) {
       // Log false login attempt with the user's ID
-      await logFalseLoginAttempt(user._id);
-      return res.status(401).json({ error: 'Invalid credentials' });
+      return res.status(401).json({ error: 'No user Exists' });
     }
 
     // Check password
     const passwordMatch = await bcrypt.compare(password, user.password);
-
+console.log(passwordMatch+" "+password+" "+user.password)
     if (!passwordMatch) {
       // Log false login attempt with the user's ID
-      await logFalseLoginAttempt(user._id);
-      return res.status(401).json({ error: 'Invalid credentials' });
+      const falseLoginAttemptSuccess = await logFalseLoginAttempt(res, user._id);
+
+      if (falseLoginAttemptSuccess==3) {
+        // Send the response only if logFalseLoginAttempt was not successful
+        return res.status(401).json({ error: 'Too many failed login attempts. Please try again later.' });
+      }
+      if (falseLoginAttemptSuccess==2) {
+        // Send the response only if logFalseLoginAttempt was not successful
+        return res.status(401).json({ error: 'Wrong Credentital.' });
+      }
     }
 
     // Log successful login
-    await logSuccessfulLogin(user._id);
+    console.log(user._id)
+    const falselogin = await logSuccessfulLogin(res, user._id);
+
+    if (!falselogin) {
+      return res.status(401).json({ error: 'Something went wrong' });
+    }
 
     // Generate and send JWT
-    // const accessToken = generateAccessToken(user._id, user.fname);
     const refreshToken = generateRefreshToken(user._id);
 
     res.status(200).json({ refreshToken });
@@ -49,78 +63,52 @@ exports.Admin_Login_Controller = async (req, res) => {
   }
 };
 
-async function logFalseLoginAttempt(userId) {
+async function logFalseLoginAttempt(res, userId) {
   try {
     const currentTimestamp = new Date().getTime();
     const timeThreshold = 10 * 60 * 1000; // 10 minutes
 
-    // Retrieve the failed login attempts within the time frame
-    const failedLoginAttempts = await FalseLoginLog.find({
-      userId,
-      timestamp: { $gte: currentTimestamp - timeThreshold },
-    });
+    // Creating initial connection 
+    const collection = await ConnectionStart(Auth_User_Transication, 'False_Request_Admin');
 
+    // Retrieve the failed login attempts within the time frame
+    const failedLoginAttempts = await collection.find({
+      UserId: userId,
+      timestamp: { $gte: currentTimestamp - timeThreshold },
+    }).toArray();
+console.log(failedLoginAttempts);
     if (failedLoginAttempts.length >= 3) {
+
+      return 3;
       // Decline the request if failed attempts exceed the limit within 10 minutes
       throw new Error('Too many failed login attempts. Please try again later.');
     }
 
-const queues = queueNames.Auth_user.Admin_Login;
-// console.log(queues.Admin_Reg);
-  await publishToQueue(queues.Admin_False_Log, JSON.stringify(userId));
+    const queues = queueNames.Auth_user.Admin_Login;
 
+    await publishToQueue(queues.Admin_False_Log, JSON.stringify(userId));
 
-
-
-
-
-    // If not exceeding the limit, create a new log
-    // await FalseLoginLog.create({
-    //   userId,
-    //   timestamp: new Date(),
-    // });
+    // Return true indicating success
+    return 2;
   } catch (error) {
-    res.status(500).json({ error: error.message });
-    // handle error appropriately
+    console.error('Error in logFalseLoginAttempt:', error.message);
+    // Log the error, but do not send a response here
+    return 3;
   }
 }
 
-
-
 function generateRefreshToken(userId) {
   const refreshTokenSecret = crypto.randomBytes(32).toString('hex');
-  return jwt.sign({ userId }, refreshTokenSecret, { expiresIn: '7d' });
+  return jwt.sign({ userId }, refreshTokenSecret, { expiresIn: '5m' });
 }
 
-async function logSuccessfulLogin(username) {
+async function logSuccessfulLogin(res, username) {
   try {
-
-  const queues = queueNames.Auth_user.Admin_Login;
-// console.log(queues.Admin_Reg);
-  await publishToQueue(queues.Admin_Successful_Log, JSON.stringify(username));
-  // res.status(200).json({ message: 'Registration successful' });
-} 
-catch (error) {
-  // console.error('Error during registration:', error.message);
-  res.status(500).json({ error: error});
-}
-
-
-
-
-
-
-
-
-  // try {
-  //   await LoginLog.create({
-  //     username,
-  //     timestamp: new Date(),
-  //     success: true,
-  //   });
-  // } catch (error) {
-  //   // console.error('Error logging successful login:', error);
-  //   res.status(500).json({ error: error});
-
-  // }
+    const queues = queueNames.Auth_user.Admin_Login;
+    await publishToQueue(queues.Admin_Successful_Log, JSON.stringify(username));
+    return true;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
 }

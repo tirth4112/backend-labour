@@ -10,7 +10,9 @@ const port = 3001;
 
 app.use(bodyParser.json());
 
-app.post('/Admin-Registration',middleware_Admin.CheckAdmin,Auth_Registration.Registeration);
+app.post('/Admin-Registration',
+// ,middleware_Admin.CheckAdmin,
+Auth_Registration.Registeration);
 
 app.post('/Admin-Login', Auth_Login.Admin_Login_Controller);
 
