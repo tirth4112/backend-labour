@@ -2,11 +2,9 @@ const mongoose = require('mongoose');
 
 const loginLogSchema = new mongoose.Schema({
  
-  UserId: {
-    type: String,
-    ref: 'Userdetail_Admin', // Assuming you have a User model to reference
-    required: true
-  },
+ 
+  UserId: { type: mongoose.Schema.Types.ObjectId, ref: 'UserDetail-Admin', required: true },
+
   timestamp: {
     type: Date,
     default: Date.now,

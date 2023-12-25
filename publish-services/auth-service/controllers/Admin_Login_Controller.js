@@ -6,15 +6,16 @@ const queueNames = require('../../../api-gateway/Rabbitmq/Queue.json');
 const publishToQueue = require('../../../api-gateway/SendingToQueue/publishToQueue.cjs');
 const Auth_User_Transication = require('../../../api-gateway/config/Auth_User_Transication.cjs');
 const crypto = require('crypto');
+const { ObjectId } = require('mongodb');
 
 
 exports.Admin_Login_Controller = async (req, res) => {
   try {
     const { Contact, password } = req.query;
-console.log(Contact)
+    console.log(Contact)
     // Check if Contact or password is undefined
     if (Contact === '' || password === '') {
-      
+
       return res.status(400).json({ message: 'Empty Field' });;
     }
 
@@ -29,17 +30,17 @@ console.log(Contact)
     }
 
     // Check password
-    const passwordMatch = await bcrypt.compare(password, user.password);
-console.log(passwordMatch+" "+password+" "+user.password)
+    const passwordMatch = await bcrypt.compare(password, user.confirmPassword);
+    console.log(passwordMatch + " " + password + " " + user.confirmPassword)
     if (!passwordMatch) {
       // Log false login attempt with the user's ID
       const falseLoginAttemptSuccess = await logFalseLoginAttempt(res, user._id);
 
-      if (falseLoginAttemptSuccess==3) {
+      if (falseLoginAttemptSuccess == 3) {
         // Send the response only if logFalseLoginAttempt was not successful
         return res.status(401).json({ error: 'Too many failed login attempts. Please try again later.' });
       }
-      if (falseLoginAttemptSuccess==2) {
+      if (falseLoginAttemptSuccess == 2) {
         // Send the response only if logFalseLoginAttempt was not successful
         return res.status(401).json({ error: 'Wrong Credentital.' });
       }
@@ -65,23 +66,39 @@ console.log(passwordMatch+" "+password+" "+user.password)
 
 async function logFalseLoginAttempt(res, userId) {
   try {
-    const currentTimestamp = new Date().getTime();
-    const timeThreshold = 10 * 60 * 1000; // 10 minutes
 
     // Creating initial connection 
     const collection = await ConnectionStart(Auth_User_Transication, 'False_Request_Admin');
 
-    // Retrieve the failed login attempts within the time frame
+
+    const currentTimestamp = new Date();
+    const timeThreshold = 10 * 60 * 1000; // 10 minutes
+
+    // Assuming you have the ObjectId as a string
+    const objectIdString = userId;
+
+    // Convert the string to ObjectId
+    const objectId = new ObjectId(objectIdString);
+
+    // Extract timestamp from ObjectId
+    const timestampFromObjectId = objectId.getTimestamp();
+
+    // Calculate the start time for the time period
+    const startTime = new Date(timestampFromObjectId - timeThreshold);
+
     const failedLoginAttempts = await collection.find({
       UserId: userId,
-      timestamp: { $gte: currentTimestamp - timeThreshold },
+      timestamp: { $gte: startTime, $lte: currentTimestamp },
     }).toArray();
-console.log(failedLoginAttempts);
+
+
+
+    console.log(failedLoginAttempts.length)
+
     if (failedLoginAttempts.length >= 3) {
 
       return 3;
-      // Decline the request if failed attempts exceed the limit within 10 minutes
-      throw new Error('Too many failed login attempts. Please try again later.');
+
     }
 
     const queues = queueNames.Auth_user.Admin_Login;

@@ -51,14 +51,15 @@ const userDetailSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true,
-        // You can add additional password validation rules here
     },
-    confirmPassword: {
+ confirmPassword: {
         type: String,
         required: true,
-        validate: {
+        validate:  {
             validator: function (value) {
-                return value === this.password;
+                // Compare the hashed password with the hashed confirmPassword
+                const hashedPassword = this.password;
+                return bcrypt.compareSync(value, hashedPassword);
             },
             message: 'Password confirmation does not match the password.',
         },
