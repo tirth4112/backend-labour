@@ -3,8 +3,8 @@ const mongoose = require('mongoose');
 const falseLoginLogSchema = new mongoose.Schema({
   
   UserId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Userdetail_Admin', // Assuming you have a User model to reference
+    type: String,
+    // ref: 'Userdetail_Admin', // Assuming you have a User model to reference
     required: true
   },
   timestamp: {

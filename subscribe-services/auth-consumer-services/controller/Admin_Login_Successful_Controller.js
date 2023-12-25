@@ -21,7 +21,7 @@ async function Admin_Login_Successful_Controller(username) {
  
         const newUser = new Login_logs_Admin(
             {
-                    UserId:username,
+                    UserId:username.toString(),
                     timestamp: new Date(),
                     success: true,
                   }
