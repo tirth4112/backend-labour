@@ -4,7 +4,8 @@
         "Client_Reg":"auth_client_reg",
         "Admin_Login":{
             "Admin_Successful_Log":"Admin_Successful_Log",
-            "Admin_False_Log":"Admin_False_Log"
+            "Admin_False_Log":"Admin_False_Log",
+            "Admin_ForgetPassword":"Admin_ForgetPassword"
 
         },
         "Client_Login":"client_login"

@@ -24,7 +24,6 @@ const userDetailSchema = new mongoose.Schema({
         required: true,
         match: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
     },
-
     address: {
         type: String,
         required: true
@@ -39,7 +38,7 @@ const userDetailSchema = new mongoose.Schema({
         match: /^[0-9]{6}$/
     },
     profileimage: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Buffer, // Use Buffer type for image data
         required: true
     },
     Contact: {
@@ -47,12 +46,11 @@ const userDetailSchema = new mongoose.Schema({
         required: true,
         // You can add additional password validation rules here
     },
-
     password: {
         type: String,
         required: true,
     },
- confirmPassword: {
+    confirmPassword: {
         type: String,
         required: true,
         validate:  {
@@ -64,7 +62,6 @@ const userDetailSchema = new mongoose.Schema({
             message: 'Password confirmation does not match the password.',
         },
     },
-    
     createdby: {
         type: mongoose.Schema.Types.ObjectId,
         required: true
@@ -88,7 +85,7 @@ const userDetailSchema = new mongoose.Schema({
     },
     active: {
         type: Boolean,
-        default:true,
+        default: true,
         required: true
     }
 });

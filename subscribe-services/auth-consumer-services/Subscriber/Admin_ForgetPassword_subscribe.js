@@ -1,25 +1,25 @@
 import amqp from 'amqplib';
-import Admin_Login_Successful_Controller from '../controller/Admin_Login_Successful_Controller.js';
+import Admin_ForgetPassword_Controller from '../controller/Admin_ForgetPassword_Controller.js';
 import queueNames from '../../../api-gateway/Rabbitmq/Queue.json' assert { type: "json" };
 
-async function Admin_Login_Successful_subscribe() {
+async function Admin_ForgetPassword() {
   try {
     const queues = queueNames.Auth_user.Admin_Login;
 
     const connection = await amqp.connect('amqp://localhost');
     const channel = await connection.createChannel();
 
-    await channel.assertQueue(queues.Admin_Successful_Log, { durable: false });
+    await channel.assertQueue(queues.Admin_ForgetPassword, { durable: false });
 
-    channel.consume(queues.Admin_Reg, async (message) => {
+    channel.consume(queues.Admin_ForgetPassword, async (message) => {
       if (message !== null) {
         const data = message.content.toString();
         console.log('Received message from queue:', data);
 
         try {
-          const userId = JSON.parse(data);
+          const da= JSON.parse(data);
 
-          await Admin_Login_Successful_Controller(userId);
+          await Admin_ForgetPassword_Controller(da);
 
           channel.ack(message);
         } catch (parseError) {
@@ -33,4 +33,4 @@ async function Admin_Login_Successful_subscribe() {
   }
 }
 
-export default Admin_Login_Successful_subscribe;
+export default Admin_ForgetPassword;

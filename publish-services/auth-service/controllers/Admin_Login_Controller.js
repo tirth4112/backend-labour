@@ -30,23 +30,53 @@ exports.Admin_Login_Controller = async (req, res) => {
     }
 
     // Check password
+
+    const collection2 = await ConnectionStart(Auth_User_Transication, 'False_Request_Admin');
+
+
+    const timeThreshold = 1 * 60 * 1000; // 10 minutes
+    const objectIdString = user._id;
+    const objectId = new ObjectId(objectIdString);
+    const timestampFromObjectId = new Date();
+    const startTime = new Date(timestampFromObjectId - timeThreshold);
+    console.log(timestampFromObjectId);
+    const failedLoginAttempts = await collection2.find({
+      UserId: user._id,
+      timestamp: { $gt: startTime },
+    }).toArray();
+console.log(failedLoginAttempts);    
+
     const passwordMatch = await bcrypt.compare(password, user.confirmPassword);
-    console.log(passwordMatch + " " + password + " " + user.confirmPassword)
-    if (!passwordMatch) {
-      // Log false login attempt with the user's ID
-      const falseLoginAttemptSuccess = await logFalseLoginAttempt(res, user._id);
+   
+    if(failedLoginAttempts.length>=3)
+    {
+      return res.status(400).json({"message":"'Too many failed login attempts. Please try again later."})
+    }
+    
+    
+    else if (!passwordMatch) {
+      const falseLoginAttemptSuccess = await logFalseLoginAttempt(res, user._id,failedLoginAttempts.length);
 
       if (falseLoginAttemptSuccess == 3) {
-        // Send the response only if logFalseLoginAttempt was not successful
         return res.status(401).json({ error: 'Too many failed login attempts. Please try again later.' });
       }
       if (falseLoginAttemptSuccess == 2) {
-        // Send the response only if logFalseLoginAttempt was not successful
         return res.status(401).json({ error: 'Wrong Credentital.' });
       }
     }
 
-    // Log successful login
+
+
+
+
+
+
+
+
+    
+
+
+
     console.log(user._id)
     const falselogin = await logSuccessfulLogin(res, user._id);
 
@@ -64,38 +94,42 @@ exports.Admin_Login_Controller = async (req, res) => {
   }
 };
 
-async function logFalseLoginAttempt(res, userId) {
+
+
+
+
+
+async function logFalseLoginAttempt(res, userId,failedLoginAttempts) {
   try {
 
-    // Creating initial connection 
-    const collection = await ConnectionStart(Auth_User_Transication, 'False_Request_Admin');
+    // // Creating initial connection 
+    // const collection = await ConnectionStart(Auth_User_Transication, 'False_Request_Admin');
 
 
-    const currentTimestamp = new Date();
-    const timeThreshold = 10 * 60 * 1000; // 10 minutes
+    // const currentTimestamp = new Date();
+    // const timeThreshold = 10 * 60 * 1000; // 10 minutes
 
-    // Assuming you have the ObjectId as a string
-    const objectIdString = userId;
+    // // Assuming you have the ObjectId as a string
+    // const objectIdString = userId;
 
-    // Convert the string to ObjectId
-    const objectId = new ObjectId(objectIdString);
+    // // Convert the string to ObjectId
+    // const objectId = new ObjectId(objectIdString);
 
-    // Extract timestamp from ObjectId
-    const timestampFromObjectId = objectId.getTimestamp();
+    // // Extract timestamp from ObjectId
+    // const timestampFromObjectId = objectId.getTimestamp();
 
-    // Calculate the start time for the time period
-    const startTime = new Date(timestampFromObjectId - timeThreshold);
+    // // Calculate the start time for the time period
+    // const startTime = new Date(timestampFromObjectId - timeThreshold);
 
-    const failedLoginAttempts = await collection.find({
-      UserId: userId,
-      timestamp: { $gte: startTime, $lte: currentTimestamp },
-    }).toArray();
+    // const failedLoginAttempts = await collection.find({
+    //   UserId: userId,
+    //   timestamp: { $gt: startTime},
+    // }).toArray();
 
 
 
-    console.log(failedLoginAttempts.length)
 
-    if (failedLoginAttempts.length >= 3) {
+    if (failedLoginAttempts>= 3) {
 
       return 3;
 
@@ -114,15 +148,20 @@ async function logFalseLoginAttempt(res, userId) {
   }
 }
 
+
+
+
+
+
 function generateRefreshToken(userId) {
   const refreshTokenSecret = crypto.randomBytes(32).toString('hex');
   return jwt.sign({ userId }, refreshTokenSecret, { expiresIn: '5m' });
 }
 
-async function logSuccessfulLogin(res, username) {
+async function logSuccessfulLogin(res, userId) {
   try {
     const queues = queueNames.Auth_user.Admin_Login;
-    await publishToQueue(queues.Admin_Successful_Log, JSON.stringify(username));
+    await publishToQueue(queues.Admin_Successful_Log, JSON.stringify(userId));
     return true;
   } catch (error) {
     console.error(error);
