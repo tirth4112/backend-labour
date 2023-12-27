@@ -2,38 +2,39 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import { createProxyMiddleware } from 'http-proxy-middleware';
-
-
+import authProxy from './ProxyNetworks/AuthProxy.js'
+import registrationProxy from './ProxyNetworks/RegistrationProxy.js';
+import employeeProxy from './ProxyNetworks/EmployeeProxy.js';
 const app = express();
 const port = 3000;
 
 app.use(bodyParser.json());
 
-const authProxy = createProxyMiddleware('/',{
-  target: 'http://localhost:3001',
-  changeOrigin: true,
-  onError: (err, req, res) => {
-    console.error('Auth Proxy Error:', err);
-    res.status(500).send('Auth Connection Error');
-  },
-});
-const registrationProxy = createProxyMiddleware('/register', {
-  target: 'http://localhost:3002',
-  changeOrigin: true,
-  onError: (err, req, res) => {
-    console.error('Registration Proxy Error:', err);
-    res.status(500).send('Registration Proxy Error');
-  },
-});
+// const authProxy = createProxyMiddleware('/',{
+//   target: 'http://localhost:3001',
+//   changeOrigin: true,
+//   onError: (err, req, res) => {
+//     console.error('Auth Proxy Error:', err);
+//     res.status(500).send('Auth Connection Error');
+//   },
+// });
+// const registrationProxy = createProxyMiddleware('/register', {
+//   target: 'http://localhost:3002',
+//   changeOrigin: true,
+//   onError: (err, req, res) => {
+//     console.error('Registration Proxy Error:', err);
+//     res.status(500).send('Registration Proxy Error');
+//   },
+// });
 
-const employeeProxy = createProxyMiddleware('/employees', {
-  target: 'http://localhost:3003',
-  changeOrigin: true,
-  onError: (err, req, res) => {
-    console.error('Employee Proxy Error:', err);
-    res.status(500).send('Employee Proxy Error');
-  },
-});
+// const employeeProxy = createProxyMiddleware('/employees', {
+//   target: 'http://localhost:3003',
+//   changeOrigin: true,
+//   onError: (err, req, res) => {
+//     console.error('Employee Proxy Error:', err);
+//     res.status(500).send('Employee Proxy Error');
+//   },
+// });
 
 app.use(authProxy);
 app.use(registrationProxy);

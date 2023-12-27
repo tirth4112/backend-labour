@@ -4,24 +4,20 @@ import Auth_User from '../../../api-gateway/config/Auth_User_Transication.cjs';
 import Login_logs_Admin from '../../../api-gateway/Model/Auth_User_Transication/Login_logs_Admin.cjs'
 // import user from '../../../api-gateway/Model/'
 import mongoose from 'mongoose';
+import ConnectionStart from '../../../api-gateway/ConnectionStart.cjs';
 
-async function Admin_Login_Successful_Controller(username) {
-    const { url, databaseName } = Auth_User;
+async function Admin_Login_Successful_Controller(userId) {
 
-    console.log(`Adding user to MongoDB: ${username}`);
-
-    const client = new MongoClient(url);
 
     try {
-        await client.connect();
-        
-        const database = client.db(databaseName);
-        const collection = database.collection('Login_Log_Admin');
+
+        // const collection = database.collection('Login_Log_Admin');
    
- 
+        const collection = await ConnectionStart(Auth_User, 'Login_Log_Admin');
+
         const newUser = new Login_logs_Admin(
             {
-                    UserId:username,
+                    UserId:userId,
                     timestamp: new Date(),
                     success: true,
                   }

@@ -27,6 +27,8 @@ async function Admin_ForgetPassword_Controller(username) {
                     success: true,
                   }
           );
+
+          
         await collection.insertOne(newUser);
 
       

@@ -17,9 +17,9 @@ async function Admin_Login_Successful_subscribe() {
         console.log('Received message from queue:', data);
 
         try {
-          const { username } = JSON.parse(data);
+          const userId = JSON.parse(data);
 
-          await Admin_Login_Successful_Controller(username);
+          await Admin_Login_Successful_Controller(userId);
 
           channel.ack(message);
         } catch (parseError) {

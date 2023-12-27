@@ -11,20 +11,25 @@ exports.Admin_ForgetPassword = async (req, res) => {
     const collection = await ConnectionStart(Auth_User, 'Admin_PasswordChange');
     const data = req.query;
     const Contact = data.Contact;
-    const users = await collection.find({ Contact }).toArray();
+    const ans=data.ans
+    const users = await collection.find({Contact: Contact}).toArray();
 
     if (!users) {
       // User with the specified contact already exists
       return res.status(401).json({ error: 'Contact not Exists' });
     }
 
-    
-    const queues = queueNames.Auth_user.Admin_Login;
+    if(users.Secret_Question!=ans)
+    {
+      return res.status(401).json({ error: 'Wrong secret ans' });
 
+    }
+
+    const queues = queueNames.Auth_user.Admin_Login;
     // Uncomment the following lines to publish data to the queue
     await publishToQueue(queues.Admin_ForgetPassword, JSON.stringify(data));
-
     res.status(200).json({ message: 'Password Change Successful' });
+
   } catch (error) {
     console.error('Error during registration:', error.message);
     res.status(400).json({ message: 'Password Not Changed' });
