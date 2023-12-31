@@ -4,13 +4,13 @@ import bodyParser from 'body-parser';
 import authProxy from './ProxyNetworks/AuthProxy.js'
 import registrationProxy from './ProxyNetworks/RegistrationProxy.js';
 import employeeProxy from './ProxyNetworks/EmployeeProxy.js';
+import cors from 'cors';
 const app = express();
 const port = 3000;
 
+
 app.use(bodyParser.json());
-
-
-
+app.use(cors());
 app.use(authProxy);
 app.use(registrationProxy);
 app.use(employeeProxy);
