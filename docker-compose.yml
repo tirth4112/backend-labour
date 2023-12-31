@@ -1,0 +1,25 @@
+version: '3'
+services:
+  apigateway:
+    build: ./apigateway
+    ports:
+      - "3000:3000"
+    networks:
+      - mynetwork
+
+  auth-publisher:
+    build: ./publish-services/auth-service
+    networks:
+      - mynetwork
+    depends_on:
+      - apigateway
+
+  auth-subscriber:
+    build: ./subscribe-services/auth-consumer-service
+    networks:
+      - mynetwork
+    depends_on:
+      - apigateway
+
+networks:
+  mynetwork:
