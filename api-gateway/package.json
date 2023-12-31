@@ -13,7 +13,10 @@
   "license": "ISC",
   "dependencies": {
     "amqplib": "^0.10.3",
+    "artillery": "^2.0.3",
+    "cors": "^2.8.5",
     "express": "^4.18.2",
+    "faker": "^6.6.6",
     "http-proxy-middleware": "^2.0.6",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.0.3",

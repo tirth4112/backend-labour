@@ -14,7 +14,7 @@ async function Admin_Login_Successful_Controller(userId) {
         // const collection = database.collection('Login_Log_Admin');
    
         const collection = await ConnectionStart(Auth_User, 'Login_Log_Admin');
-
+console.log(userId)
         const newUser = new Login_logs_Admin(
             {
                     UserId:userId,
@@ -29,7 +29,6 @@ async function Admin_Login_Successful_Controller(userId) {
         console.error('Error adding user to MongoDB:', error.message);
         throw error; // Rethrow the error to handle it elsewhere if needed
     } finally {
-        await client.close();
     }
 }
 

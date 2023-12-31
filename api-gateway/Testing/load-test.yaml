@@ -1,0 +1,11 @@
+# load-test.yaml
+config:
+  target: http://localhost:3000
+  phases:
+    - duration: 180
+      arrivalRate: 15
+
+scenarios:
+  - flow:
+      - get:
+          url: "/get/Admin-Login?Contact=8320548612&password=1234"

@@ -21,7 +21,7 @@ async function Admin_Registration_Controller(data) {
         const newUser = new Userdetail({
             fname: data.fname,
             lname: data.lname,
-            age: 25,
+            age: data.age,
             gender: data.gender,
             emailid: data.emailid,
             address: data.address,
