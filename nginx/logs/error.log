@@ -1,0 +1,10 @@
+2024/01/05 23:30:45 [emerg] 55716#50056: CreateDirectory() "F:\Labour work Software project\Backend\nginx/temp/client_body_temp" failed (3: The system cannot find the path specified)
+2024/01/05 23:31:50 [emerg] 87936#87940: unknown log format "main" in F:\Labour work Software project\Backend\nginx/nginx.conf:9
+2024/01/05 23:37:58 [emerg] 88972#88976: unknown log format "main" in F:\Labour work Software project\Backend\nginx/nginx.conf:9
+2024/01/05 23:38:22 [emerg] 86764#87472: unknown log format "main" in F:\Labour work Software project\Backend\nginx/nginx.conf:9
+2024/01/05 23:38:35 [emerg] 16496#88032: CreateDirectory() "F:\Labour work Software project\Backend\nginx/temp/client_body_temp" failed (3: The system cannot find the path specified)
+2024/01/05 23:39:55 [emerg] 83584#7424: CreateFile() "F:\Labour work Software project\Backend\nginx/conf/nginx.conf" failed (3: The system cannot find the path specified)
+2024/01/05 23:40:08 [emerg] 88652#11780: CreateFile() "F:\Labour work Software project\Backend\nginx/conf/nginx.conf" failed (3: The system cannot find the path specified)
+2024/01/05 23:40:33 [emerg] 88620#87384: CreateFile() "F:\Labour work Software project\Backend\nginx/conf/nginx.conf" failed (3: The system cannot find the path specified)
+2024/01/06 09:39:27 [emerg] 45236#45176: CreateFile() "F:\Labour work Software project\Backend\nginx/conf/nginx.conf" failed (3: The system cannot find the path specified)
+2024/01/06 09:40:25 [emerg] 21392#36352: CreateDirectory() "F:\Labour work Software project\Backend\nginx/temp/client_body_temp" failed (3: The system cannot find the path specified)
